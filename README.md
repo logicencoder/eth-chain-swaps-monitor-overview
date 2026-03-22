@@ -10,6 +10,7 @@ It is not a hosted SaaS platform; heavy processing runs on dedicated infrastruct
 
 - Current delivery mode: **standalone local-first monitor**
 - Live website mode: **planned (public link will be added when release is ready)**
+- Live URL: `Coming soon`
 
 ## UI Snapshot
 
