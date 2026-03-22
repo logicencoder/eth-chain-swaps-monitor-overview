@@ -8,6 +8,9 @@
 This is a **standalone local-first monitoring application** for Ethereum swap and transaction flow tracking.
 It is not a hosted SaaS platform; heavy processing runs on dedicated infrastructure under my control.
 
+- Current delivery mode: **standalone local-first monitor**
+- Live website mode: **planned (public link will be added when release is ready)**
+
 ## UI Snapshot
 
 ![ETH Chain Swaps Monitor UI](assets/eth-chain-swaps-monitor-overview.png)
