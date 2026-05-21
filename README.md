@@ -1,132 +1,249 @@
-# ETH Chain Swaps Monitor (Standalone) — Overview
+# ETH Chain Swaps Monitor — Overview
 
-> This repository is a public overview of a private implementation.
-> It excludes sensitive source internals and operational secrets.
+Public-facing description of the private application [`logicencoder/eth-chain-swaps-monitor`](https://github.com/logicencoder/eth-chain-swaps-monitor). This repo contains **no secrets**, no RPC keys, and no proprietary parser source.
 
 ## Positioning
 
-This is a **standalone local-first monitoring application** for Ethereum swap and transaction flow tracking.
-It is not a hosted SaaS platform; heavy processing runs on dedicated infrastructure under my control.
-
-- Current delivery mode: **standalone local-first monitor**
-- Live website mode: **planned (public link will be added when release is ready)**
-- Live URL: `Coming soon`
-
-## UI Snapshot
+| | |
+|--|--|
+| **What** | Standalone, operator-controlled Ethereum swap monitor with live dashboard |
+| **Where it runs** | Dedicated infrastructure (local Geth or private RPC), not a multi-tenant SaaS |
+| **Delivery today** | Local-first console on your own node |
+| **Public website** | Planned; URL will be added when a hosted read-only view ships |
 
 ![ETH Chain Swaps Monitor UI](assets/eth-chain-swaps-monitor-overview.png)
 
-## What this project is
+---
 
-A realtime on-chain monitoring console focused on swap detection, transaction interpretation, and operator visibility.
-It combines Python collectors with a live dashboard for fast triage and investigation.
+## Who this is for
 
-## Tech Stack Used
+### Traders and researchers
 
-- **Backend**: Python, FastAPI, async event handling, Web3 integration
-- **Realtime transport**: WebSocket stream (`/ws`) + REST endpoints for dashboard queries
-- **Frontend**: HTML/CSS/JavaScript dashboard views (`dashboard.html`, `dashboard1.html`, `candy.html`)
-- **Data artifacts**: JSON knowledge stores (method signatures, pool discovery) + runtime stats persistence
-- **Infra style**: local-first processing with controlled public exposure
+You need to see **large or repeated swaps** on specific tokens and pools without refreshing Etherscan. The tool surfaces buy/sell direction, USD size, pool liquidity context, and gas paid—so you can decide whether a move is actionable noise or structural flow.
 
-## High-Level Architecture
+### System engineers
 
-- **Collector Layer**: chain event ingestion + transaction decoding
-- **Interpretation Layer**: swap parser routing across multiple pool/protocol patterns
-- **Service Layer**: FastAPI endpoints for stats, mode controls, search, and feed retrieval
-- **Realtime Layer**: WebSocket broadcast for instant dashboard updates
-- **UI Layer**: operator dashboard for live alerts, quote tables, terminal feed, and address search
+You care about **event-driven ingestion** (WebSocket `eth_subscribe` with batching), **receipt-based fallback** when subscriptions are impractical, and a **hybrid API** (REST for state, WebSocket for push). The architecture is one deployable Python service plus static HTML, suitable for colocation with an Ethereum node.
 
-## Feature Inventory
+### Recruiters and collaborators
 
-### A) Monitoring Runtime
+This is evidence of **full-stack systems work**: chain decoding, financial normalization, persistence, and a real-time UI—not a tutorial CRUD app. The private repo holds implementation; this overview explains capabilities grounded in that code.
 
-1. Realtime transaction monitoring loop
-2. Toggle monitoring without process teardown
-3. Runtime mode switching via API
-4. Terminal feed on/off toggle
-5. Live block progression visibility
-6. Transaction-in-block position tracking
-7. Address-centric event aggregation
-8. Watched-wallet support pipeline
+---
 
-### B) Swap Interpretation & Parsing
+## Problem it solves
 
-9. Universal swap parse entrypoint
-10. V2 swap parser support
-11. V3 swap parser support
-12. Curve swap parser support
-13. DODO swap parser support
-14. Maverick swap parser support
-15. Method signature normalization
-16. Method signature metadata loading
-17. Pool type detection pipeline
-18. DEX identification helpers
+On-chain markets generate thousands of logs per minute. Manual exploration does not scale when you:
 
-### C) Data Products & APIs
+- Track many Uniswap V2/V3 (and related) pools for the same token universe
+- Follow a **wallet watchlist** (whales, market makers, deployer wallets)
+- Need **consistent USD framing** and **trade-size ladders** (e.g. “what if I buy $500?”) at decision time
 
-19. `/api/stats` operational stats endpoint
-20. `/api/alerts` alert feed endpoint
-21. `/api/search/{address}` address investigation endpoint
-22. `/api/quote_tables` quote table endpoint
-23. `/api/mode` mode get/set endpoints
-24. `/api/toggle_monitoring` control endpoint
-25. `/api/toggle_terminal_log` control endpoint
-26. Dashboard route endpoint (`/dashboard`)
-27. Candy route endpoint (`/candy`)
-28. Root route endpoint (`/`)
+The monitor **filters, decodes, enriches, and broadcasts** only swap-relevant activity tied to your configuration—reducing time from “something moved” to “who, how much, which pool, what slippage band.”
 
-### D) Realtime UI & Operator Tools
+---
 
-29. WebSocket live stream endpoint (`/ws`)
-30. Live alert feed panel
-31. Live terminal stream panel
-32. Search-driven address drill-down
-33. Top-addresses table
-34. Quote table rendering
-35. Mode selector controls
-36. Status indicator panel
-37. Expand/collapse behavior for dense feeds
-38. Manual refresh controls for quote data
+## High-level architecture
 
-### E) Reliability & Maintenance
+```mermaid
+flowchart LR
+  subgraph chain [Ethereum node / RPC]
+    WS[WebSocket subscriptions]
+    HTTP[HTTP JSON-RPC]
+  end
+  subgraph svc [Monitor service]
+    ING[Ingestion loop]
+    DEC[Pool detect + swap parsers]
+    ENR[USD / gas / quotes]
+    API[FastAPI REST]
+    PUSH[Dashboard WebSocket]
+  end
+  subgraph store [Local artifacts]
+    SQL[(SQLite history)]
+    JSON[Stats + alerts + quotes]
+  end
+  subgraph ui [Operator UI]
+    DASH[HTML dashboards]
+  end
+  WS --> ING
+  HTTP --> ING
+  ING --> DEC --> ENR
+  ENR --> SQL
+  ENR --> JSON
+  ENR --> API
+  ENR --> PUSH
+  API --> DASH
+  PUSH --> DASH
+```
 
-39. Database initialization bootstrap
-40. Alerts load/save persistence
-41. Stats load/save persistence
-42. Quote-table caching/warmup logic
-43. Legacy quote migration utility
-44. Broadcast fanout helper for multi-clients
-45. WebSocket reconnect-oriented service design
-46. Compatible with iterative parser extension
+---
 
-## Target Audience
+## Feature guide (what / why / who)
 
-### Recruiters
+### 1. Multi-pool swap surveillance (Mode 1)
 
-This shows practical backend + realtime engineering ability from real shipped tooling, not only tutorial projects.
+| | |
+|--|--|
+| **What** | Subscribes to swap event signatures on hundreds of pool contracts (batched subscriptions), plus pending txs and new blocks |
+| **Why** | Lowest latency path when you already know which pools matter |
+| **Who** | Operators running a WS-capable node or provider |
 
-### System Engineers
+### 2. Wallet watchlist + receipt decoding (Mode 2)
 
-This shows event ingestion, decoding pipelines, WebSocket/REST hybrid service shape, and operator-facing observability.
+| | |
+|--|--|
+| **What** | Polls new blocks; for addresses in `add1.txt`, loads receipts and detects swap logs—even on pools outside your config |
+| **Why** | Follow **wallets** first; discover which pools they hit after the fact |
+| **Who** | Whale tracking, counterparty research, debugging parser coverage |
 
-### Collaborators / Employers
+Mode 2 can emit **proof events** for swaps on unknown pools (logged for review) and supports **historical backfill** over the last N blocks for validation runs.
 
-This shows how I build and learn independently: start from a concrete problem, ship a working monitor, then iterate architecture and parsing coverage.
+### 3. Broad pool log capture (Mode 3)
 
-## Working Style (Grounded)
+| | |
+|--|--|
+| **What** | Subscribes to **all logs** from listed pool addresses (not only swap topics) |
+| **Why** | Catch non-standard or newly indexed event layouts during protocol experiments |
+| **Who** | Developers extending parsers |
 
-- Self-taught, built incrementally from zero
-- Focus on delivery and measurable behavior
-- Learn missing pieces fast when requirements grow
-- Prefer practical system understanding over theory-only claims
+### 4. Watchlist block scanning (Mode 4)
 
-## Security & Disclosure
+| | |
+|--|--|
+| **What** | Documented as watchlist + “all transactions”; shares the HTTP block scanner with Mode 2 in current builds |
+| **Why** | Intended for full per-wallet tx visibility alongside swap detection |
+| **Who** | Operators who prioritize address-centric monitoring over pool-centric |
 
-- Private source internals remain private
-- No credentials, private endpoints, or sensitive infra details are published here
-- This repository is strictly a non-sensitive architecture and capability overview
+### 5. Automatic pool type and DEX detection
 
-## Related Private Implementation
+| | |
+|--|--|
+| **What** | Probes contracts on-chain for V2 reserves, V3 fee tier, Curve/Maverick/DODO interfaces; maps factory to DEX name (Uniswap, SushiSwap, PancakeSwap V3, etc.) |
+| **Why** | Avoid maintaining a static registry for every deployment |
+| **Who** | Anyone adding pools via JSON config only |
 
-- Private app repo: `logicencoder/eth_chain_swaps_monitor`
+### 6. Universal swap parsing (V2 / V3 / Curve / DODO / Maverick)
+
+| | |
+|--|--|
+| **What** | Routes each log to a type-specific decoder; determines buy vs sell relative to your tracked token |
+| **Why** | One pipeline for display, DB insert, and alerts |
+| **Who** | Traders comparing execution across DEX generations |
+
+### 7. USD valuation and trade ladders
+
+| | |
+|--|--|
+| **What** | ETH/USD from public spot ticker; quote tokens WETH, stables, WBTC; prints and stores **buy/sell ladders** at $100–$1000 notionals (V2 math vs V3 quoter where available) |
+| **Why** | Last trade price alone misstates impact for size |
+| **Who** | Execution-focused users sizing entries/exits |
+
+### 8. Live FastAPI dashboard
+
+| | |
+|--|--|
+| **What** | Serves `candy.html` (primary) or legacy dashboards; default port 8059 |
+| **Why** | Single process for chain thread + operator UI |
+| **Who** | Day-to-day operators |
+
+### 9. Real-time WebSocket feed (`/ws`)
+
+| | |
+|--|--|
+| **What** | Pushes `new_alert`, `stats_update`, `block_update`, `quote_table_update`, keepalive pings |
+| **Why** | Sub-second UI updates without polling `/api/alerts` |
+| **Who** | Custom frontends or multi-screen setups |
+
+### 10. REST control and query API
+
+| | |
+|--|--|
+| **What** | Stats, alerts, address search, quote tables, mode change, pause monitoring, toggle terminal logging |
+| **Why** | Automation, scripting, and lightweight clients |
+| **Who** | Integrators wiring alerts into Slack/Telegram (external to this repo) |
+
+### 11. Address statistics and “top traders”
+
+| | |
+|--|--|
+| **What** | Aggregates buy/sell counts per `from` address; surfaces top 20 in `/api/stats` |
+| **Why** | Spot repeat aggressors quickly |
+| **Who** | Researchers building behavioral profiles |
+
+### 12. SQLite transaction history
+
+| | |
+|--|--|
+| **What** | Persists enriched swap rows (hash, pool, type, gas, method, position in block, …) |
+| **Why** | Survive restarts; support later analytics |
+| **Who** | Operators exporting history for spreadsheets or BI |
+
+### 13. Quote table cache
+
+| | |
+|--|--|
+| **What** | JSONL quote files + index; API can return summaries without full ladder payload |
+| **Why** | Keep dashboard responsive under burst swap traffic |
+| **Who** | UI users comparing pools side-by-side |
+
+### 14. RPC provider flexibility
+
+| | |
+|--|--|
+| **What** | Local Geth, LAN IP, Ankr, DRPC, Infura, Alchemy, QuickNode; env vars or CLI |
+| **Why** | Resilience when one endpoint rate-limits or lacks WS |
+| **Who** | DevOps moving between home lab and hosted RPC |
+
+### 15. Operator controls without restart
+
+| | |
+|--|--|
+| **What** | Toggle monitoring and terminal log; switch desired monitor mode via API |
+| **Why** | Reduce noise during maintenance or chain reorgs investigation |
+| **Who** | On-call operators |
+
+### 16. Mode 2 diagnostics
+
+| | |
+|--|--|
+| **What** | Counters for receipts fetched, swap logs found, unknown pools, skipped methods; optional debug trace for first N txs |
+| **Why** | Prove the watchlist pipeline is healthy when alerts are quiet |
+| **Who** | Engineers validating deployments |
+
+---
+
+## Tech stack (summary)
+
+- **Backend:** Python, FastAPI, asyncio, Web3.py, websockets
+- **Chain libraries:** eth_defi (Uniswap V3 quoter paths)
+- **Frontend:** Static HTML/CSS/JS dashboards
+- **Data:** SQLite + JSON/JSONL sidecars
+
+---
+
+## What is intentionally private
+
+- Full source of `eth_chain_swaps_monitor.py`
+- Production pool lists, watchlists, and database files
+- Internal hostnames and API keys
+
+---
+
+## Related repositories
+
+| Repository | Visibility |
+|------------|------------|
+| [eth-chain-swaps-monitor](https://github.com/logicencoder/eth-chain-swaps-monitor) | Private code |
+| **eth-chain-swaps-monitor-overview** (this repo) | Public overview |
+
+---
+
+## Working style
+
+Built incrementally: start from observable on-chain behavior, add parsers and modes as real transactions expose edge cases, then fold learnings into dashboard and persistence. Documentation here tracks **shipped behavior**, not a roadmap wishlist.
+
+---
+
+## Security disclosure
+
+No credentials, private RPC URLs, or personal watchlist data belong in this public repo. For vulnerability reports, use the contact method you already use for LogicEncoder private infrastructure (not listed here to avoid spam).
