@@ -2,7 +2,7 @@
 
 ![Ethereum Chain Swap Monitor — dark theme](assets/dashboard-featured-dark.png)
 
-Real-time **Ethereum swap monitor** with a compact operator dashboard. The service ingests chain events over WebSocket subscriptions or HTTP block polling, decodes pool swap activity across multiple AMM signatures, enriches events with USD context and quote ladders, and pushes updates to the browser in real time.
+Real-time **Ethereum swap monitor** with a compact operator dashboard. **Default mode (1)** ingests pool swap logs over **WebSocket** `eth_subscribe`; watchlist modes **2/4** use HTTP block scan by design. The browser UI streams over **WebSocket** (`/ws`), with REST only for initial load and controls.
 
 Private source: [logicencoder/eth-chain-swaps-monitor](https://github.com/logicencoder/eth-chain-swaps-monitor). RPC keys and wallet lists stay on your infrastructure — not in this public overview.
 
@@ -11,7 +11,7 @@ Private source: [logicencoder/eth-chain-swaps-monitor](https://github.com/logice
 | Layer | Technologies |
 |-------|--------------|
 | Core service | Python + FastAPI |
-| Chain ingestion | Web3.py — WebSocket `logs` and HTTP block polling |
+| Chain ingestion | Web3.py — **WebSocket** pool `logs` (modes 1/3); **HTTP** block scan for watchlist modes 2/4 |
 | Persistence | SQLite (`whale_monitor.db`) + rolling JSON/JSONL artifacts |
 | UI | Single-page `dashboard.html` (CSS/JS inline) — primary operator UI |
 | Streaming | REST + WebSocket (`/ws`) on port **8059** (configurable) |
