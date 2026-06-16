@@ -63,13 +63,23 @@ The left column ranks wallets by activity (`swap_stats.json`) with sortable colu
 
 ### Live alerts — accordion swap feed
 
+![Expanded swap card — dark theme](assets/dashboard-dark-feed.png)
+
 The **Live alerts** feed is a scrollable stack of swap cards fed by `/api/alerts` and live `new_alert` WebSocket events. Expanded cards show block/protocol chips, token route, trader address and transaction hash (both Etherscan links), and a three-column detail matrix (liquidity, transaction, fees).
 
 **Freeze** on the alerts header pauses feed re-rendering while WebSocket ingestion continues — independent from quote-table freeze.
 
-### Quote tables and terminal
+### Saved quote tables
 
-**Saved quote tables** list per-pool trade-size ladders with sort options. **Freeze** on this panel stops quote UI updates only. The **terminal** mirrors server log lines and WebSocket status (connect, theme changes, mode switches, quote updates).
+![Saved quote tables — dark theme](assets/dashboard-dark-quotes.png)
+
+**Saved quote tables** list per-pool trade-size ladders with sort options (**Latest first**, coin name, liquidity). **Freeze** on this panel stops quote UI updates only.
+
+### Live terminal
+
+![Live terminal — dark theme](assets/dashboard-dark-terminal.png)
+
+The **terminal** mirrors server log lines and WebSocket status (connect, theme changes, mode switches, quote updates). It can be disabled or cleared without stopping the monitor.
 
 ## Monitoring modes (backend)
 
