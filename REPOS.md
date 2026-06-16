@@ -3,4 +3,4 @@
 | Repository | Visibility | Role |
 |------------|------------|------|
 | [eth-chain-swaps-monitor](https://github.com/logicencoder/eth-chain-swaps-monitor) | private | Python monitor, dashboards, SQLite persistence |
-| [eth-chain-swaps-monitor-overview](https://github.com/logicencoder/eth-chain-swaps-monitor-overview) | public | Product description + dark-theme dashboard screenshots (this repo) |
+| [eth-chain-swaps-monitor-overview](https://github.com/logicencoder/eth-chain-swaps-monitor-overview) | public | Product description + dashboard screenshots (Dark, Medium, Light themes) |
