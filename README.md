@@ -155,7 +155,7 @@ See [REPOS.md](REPOS.md) for repository links.
 
 ---
 
-## Feature examples (two per capability)
+## Operator workflows
 
 #### Monitor Mode 1 — pool swaps
 1. You subscribe to hundreds of pools — swap topic logs trigger full decode and alert push.
