@@ -31,13 +31,13 @@ Saved quote tables and swap-preview controls provide supporting context alongsid
 
 ## Watch the operating context
 
-A live terminal and connection information assist when the feed appears quiet or interrupted. Monitoring mode controls support the available observation choices. They provide visibility into the session without requiring a public explanation of the internal monitoring engine.
+A live terminal and connection information assist when the feed appears quiet or interrupted. Monitoring mode controls support the available observation choices. They help the operator check the current observation context when a feed needs attention.
 
 ![Ethereum Chain Swap Monitor — Watch the operating context](assets/dashboard-dark-terminal.png)
 
 ## Choose a comfortable presentation
 
-Dark, medium and light themes support different viewing conditions, while collapsible panels help control the amount of detail on screen. The available images show the main feed and supporting areas. The product presentation can focus on those investigative workflows rather than setup instructions.
+Dark, medium and light themes support different viewing conditions, while collapsible panels help control the amount of detail on screen.
 
 ![Ethereum Chain Swap Monitor — Choose a comfortable presentation](assets/dashboard-theme-medium.png)
 
