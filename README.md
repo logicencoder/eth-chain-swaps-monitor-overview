@@ -2,7 +2,7 @@
 
 ![Ethereum Chain Swap Monitor workspace](assets/dashboard-featured-dark.png)
 
-Following on-chain swaps is easier when transactions, recurring addresses and live context share one workspace. Ethereum Chain Swap Monitor brings those views together so an operator can observe activity, narrow an investigation and keep useful comparisons nearby.
+Ethereum Chain Swap Monitor follows swaps on Ethereum in real time. A Python process reads new blocks and logs from an Ethereum node, recognises swaps in known liquidity pools, values them in dollars and shows them in a live dashboard with alerts, the most active addresses, saved quote tables and a live terminal. It is a self-hosted operator tool for people who want to watch large or unusual swap activity as it happens.
 
 ## Tech stack
 
@@ -13,7 +13,7 @@ Following on-chain swaps is easier when transactions, recurring addresses and li
 
 ## Follow the live swap feed
 
-The alert feed presents relevant swaps in a form that can be scanned and expanded for detail. Session information and monitoring controls keep the current observation context visible. This helps the operator follow activity without opening each transaction as a separate task.
+The **Live Alerts Feed** keeps the latest 250 swaps in a list that can be scanned and expanded for detail; auto-expand opens new entries as they arrive and a freeze switch stops the list moving while you read. **Stop monitoring** pauses the scan without closing the dashboard.
 
 The feed provides a starting point for examining a particular swap or a period of activity. Keep the transaction context visible while moving into the views relevant to the question.
 
@@ -21,7 +21,7 @@ The feed provides a starting point for examining a particular swap or a period o
 
 ## Investigate recurring addresses
 
-Address rankings draw attention to participants that recur in the observed activity. Search and address-focused panels support narrowing the investigation from the general feed. The information helps identify what to inspect next rather than claiming to explain a trader's intent.
+The **Top 20 Most Active Addresses** ranking shows the participants that recur in the observed swaps, and the search box looks up any address. The ranking tells you what to inspect next; it does not explain a trader's intent.
 
 Repeated participants can be easier to understand when their observations are grouped for review. Move from a single event to the available address information without reconstructing the investigation.
 
@@ -29,7 +29,7 @@ Repeated participants can be easier to understand when their observations are gr
 
 ## Keep comparisons nearby
 
-Saved quote tables and swap-preview controls provide supporting context alongside the feed. They let the operator retain useful comparisons during a monitoring session. Keeping these views together reduces repeated switching between observation and comparison tools.
+**Saved Quote Tables** keep a quote per pool for comparison next to the feed; **Refresh quotes** updates them and they can be ordered latest or oldest first, by coin name (A to Z or Z to A) or by liquidity (highest or smallest).
 
 Market comparisons provide another perspective on the activity being watched. Keeping quotes near the chain observations helps the operator examine context within one workspace.
 
@@ -37,7 +37,7 @@ Market comparisons provide another perspective on the activity being watched. Ke
 
 ## Watch the operating context
 
-A live terminal and connection information assist when the feed appears quiet or interrupted. Monitoring mode controls support the available observation choices. They help the operator check the current observation context when a feed needs attention.
+The **Live Terminal** shows what the monitor is doing and can be disabled or cleared. Four monitoring modes decide what is read: pools with swap logs, a watchlist with swap receipts, pools with all logs, or a watchlist with all transactions (apply the mode with one button; modes 2 and 4 currently behave the same). A **Pool Mgmt** page switches individual pools on or off and records the reason.
 
 Operational information matters when a quiet view might reflect either little activity or an interruption. The terminal and status views help the operator inspect that distinction.
 
@@ -45,7 +45,7 @@ Operational information matters when a quiet view might reflect either little ac
 
 ## Choose a comfortable presentation
 
-Dark, medium and light themes support different viewing conditions, while collapsible panels help control the amount of detail on screen.
+Three themes (dark, medium and light) change the colours, and every panel can be collapsed, which helps when the monitor stays open for a long session.
 
 Theme and display choices let the same information fit different working conditions. A comfortable presentation is especially useful when the monitor remains open for an extended session.
 
