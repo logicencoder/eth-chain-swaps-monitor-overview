@@ -1,6 +1,6 @@
 # Ethereum Chain Swap Monitor
 
-![Ethereum Chain Swap Monitor workspace](assets/eth-chain-swap-monitor-dashboard-featured-dark.png)
+![Ethereum Chain Swap Monitor workspace](assets/eth-chain-swap-monitor-live-swap-feed-dashboard.png)
 
 Ethereum Chain Swap Monitor follows swaps on Ethereum in real time. A Python process reads new blocks and logs from an Ethereum node, recognises swaps in known liquidity pools, values them in dollars and shows them in a live dashboard with alerts, the most active addresses, saved quote tables and a live terminal. It is a self-hosted operator tool for people who want to watch large or unusual swap activity as it happens.
 
