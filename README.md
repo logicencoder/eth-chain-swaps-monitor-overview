@@ -1,6 +1,6 @@
 # Ethereum Chain Swap Monitor
 
-![Ethereum Chain Swap Monitor workspace](assets/dashboard-featured-dark.png)
+![Ethereum Chain Swap Monitor workspace](assets/eth-chain-swap-monitor-dashboard-featured-dark.png)
 
 Ethereum Chain Swap Monitor follows swaps on Ethereum in real time. A Python process reads new blocks and logs from an Ethereum node, recognises swaps in known liquidity pools, values them in dollars and shows them in a live dashboard with alerts, the most active addresses, saved quote tables and a live terminal. It is a self-hosted operator tool for people who want to watch large or unusual swap activity as it happens.
 
@@ -17,7 +17,7 @@ The **Live Alerts Feed** keeps the latest 250 swaps in a list that can be scanne
 
 The feed provides a starting point for examining a particular swap or a period of activity. Keep the transaction context visible while moving into the views relevant to the question.
 
-![Ethereum Chain Swap Monitor — Follow the live swap feed](assets/dashboard-dark-feed.png)
+![Ethereum Chain Swap Monitor — Follow the live swap feed](assets/eth-chain-swap-monitor-dashboard-dark-feed.png)
 
 ## Investigate recurring addresses
 
@@ -25,7 +25,7 @@ The **Top 20 Most Active Addresses** ranking shows the participants that recur i
 
 Repeated participants can be easier to understand when their observations are grouped for review. Move from a single event to the available address information without reconstructing the investigation.
 
-![Ethereum Chain Swap Monitor — Investigate recurring addresses](assets/dashboard-dark-addresses.png)
+![Ethereum Chain Swap Monitor — Investigate recurring addresses](assets/eth-chain-swap-monitor-dashboard-dark-addresses.png)
 
 ## Keep comparisons nearby
 
@@ -33,7 +33,7 @@ Repeated participants can be easier to understand when their observations are gr
 
 Market comparisons provide another perspective on the activity being watched. Keeping quotes near the chain observations helps the operator examine context within one workspace.
 
-![Ethereum Chain Swap Monitor — Keep comparisons nearby](assets/dashboard-dark-quotes.png)
+![Ethereum Chain Swap Monitor — Keep comparisons nearby](assets/eth-chain-swap-monitor-dashboard-dark-quotes.png)
 
 ## Watch the operating context
 
@@ -41,7 +41,7 @@ The **Live Terminal** shows what the monitor is doing and can be disabled or cle
 
 Operational information matters when a quiet view might reflect either little activity or an interruption. The terminal and status views help the operator inspect that distinction.
 
-![Ethereum Chain Swap Monitor — Watch the operating context](assets/dashboard-dark-terminal.png)
+![Ethereum Chain Swap Monitor — Watch the operating context](assets/eth-chain-swap-monitor-dashboard-dark-terminal.png)
 
 ## Choose a comfortable presentation
 
@@ -49,11 +49,11 @@ Three themes (dark, medium and light) change the colours, and every panel can be
 
 Theme and display choices let the same information fit different working conditions. A comfortable presentation is especially useful when the monitor remains open for an extended session.
 
-![Ethereum Chain Swap Monitor — Choose a comfortable presentation](assets/dashboard-theme-medium.png)
+![Ethereum Chain Swap Monitor — Choose a comfortable presentation](assets/eth-chain-swap-monitor-dashboard-theme-medium.png)
 
 The light presentation offers another working environment for the same swap-monitoring tasks. Theme choice changes readability preferences while the investigation remains centred on the selected observations.
 
-![Ethereum Chain Swap Monitor — Choose a comfortable presentation](assets/dashboard-theme-light.png)
+![Ethereum Chain Swap Monitor — Choose a comfortable presentation](assets/eth-chain-swap-monitor-dashboard-theme-light.png)
 
 ---
 
